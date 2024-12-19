@@ -59,3 +59,33 @@ def upload_image(
 
     # Return the Image object schema
     return ImageSchema.model_validate(image)
+
+@router.get("/images/{image_id}", response_model=ImageSchema)
+def get_image(image_id: UUID, db: Session = Depends(get_session)):
+    """
+    Get an image by ID.
+    """
+    image = db.query(Image).filter(Image.id == str(image_id)).first()
+    if not image:
+        raise HTTPException(status_code=404, detail="Image not found")
+    return ImageSchema.model_validate(image)
+
+@router.post("/images/{image_id}/annotate", response_model=ImageSchema)
+def annotate_image(image_id: UUID, annotated_image: UploadFile, db: Session = Depends(get_session)):
+    """
+    Annotate an image and update the annotated_image_url field.
+    """
+    image = db.query(Image).filter(Image.id == str(image_id)).first()
+    if not image:
+        raise HTTPException(status_code=404, detail="Image not found")
+
+    # Upload the annotated image to Cloudinary
+    upload_result = cloudinary.uploader.upload(annotated_image.file)
+    annotated_image_url = upload_result.get("secure_url")
+
+    # Update the image object
+    image.annotated_image_url = annotated_image_url
+    db.commit()
+    db.refresh(image)
+
+    return ImageSchema.model_validate(image)
