@@ -4,6 +4,7 @@ from streamlit_img_label import st_img_label
 
 # FastAPI backend URL
 backend_url = "https://label-box-backend.onrender.com"
+frontend_url = "https://label-box-backend-htld236vutbbhx9t5fleyu.streamlit.app"
 
 # Function to create a new project
 def create_project(title):
@@ -95,33 +96,46 @@ def upload_image(project_id, image_file):
         st.error("Failed to upload image")
 
 # Streamlit app layout
-st.title("Project Management")
+st.title("Label Box 🏷️")
+
+st.write("A simple label box application using FastAPI and Streamlit.")
+
+# Project information
+st.write(f"🔗 Backend URL: {backend_url}")
+st.write(f"🔗 Frontend URL: {frontend_url}")
+
+# Write 
+st.write("This application uses Cloudinary for media storage and PostgreSQL as a database. It performs all the necessary CRUD operations required for a label box application.")
+
+# Add a link to your GitHub profile
+st.markdown("👤 [GitHub Profile](https://github.com/Sayrikey1)")
+st.markdown("📦 [Project Repo](https://github.com/Sayrikey1/label-box-backend)")
 
 # Create project section
-st.header("Create a New Project")
+st.header("Create a New Project 🆕")
 project_title = st.text_input("Project Title")
 if st.button("Create Project"):
     create_project(project_title)
 
 # Get project section
-st.header("Get Project Details")
+st.header("Get Project Details 🔍")
 project_id = st.text_input("Project ID")
 if st.button("Get Project"):
     get_project(project_id)
 
 # Get all projects section
-st.header("Get All Projects")
+st.header("Get All Projects 📋")
 if st.button("Get All Projects"):
     get_all_projects()
 
 # Get image section
-st.header("Get Image Details")
+st.header("Get Image Details 🖼️")
 image_id = st.text_input("Image ID")
 if st.button("Get Image"):
     get_image(image_id)
 
 # Upload image section
-st.header("Upload Image to Project")
+st.header("Upload Image to Project 📤")
 upload_project_id = st.text_input("Project ID for Image Upload")
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 if st.button("Upload Image"):
